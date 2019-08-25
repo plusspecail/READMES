@@ -14,7 +14,7 @@ Formula Accessory
 形状の名前は私が形を見てそれっぽい名前を付けただけなので人によっては捉え方が異なるかもしれません。 ご了承ください。
 
 <details><summary>桜</summary> 
-<img src="./Pictures/CherryBloosum.png" width=300x300>  
+<img src="./Pictures/CherryBloosums.png" width=300x300>  
 </details>  
 
 <details><summary>花</summary>
