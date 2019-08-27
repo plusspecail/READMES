@@ -203,23 +203,28 @@ half r = FORMULA_FLOWER;
 
 # 同梱物の説明
 
-- **Shaders/FormulaAccessory.shader :** 
-こちらを適当なMaterialにアタッチして使用します。パラメータを変更することで自由に形、色などを変更することが可能です。  
-
-- **Scripts/ResetMesh.cs :**  
-Meshの変更をShaderに伝えるScriptです。
-
-- **Scripts/CustomShaderGUI.cs :**  
+- **Editor/CustomShaderGUI.cs :**  
 Shaderのプロパティの見た目を変更するエディタ拡張です。
 
-- **Models/FormulaRingModel :**  
-33ポリゴンのリングです。 形が少し歪かもしれませんがShaderでポリゴンを変形するのであまり気にする必要ないと思います。 
+- **Editor/ShaderPropertyHelper.cs :**  
+MeshFilterまたはSkinnedMeshRendererに登録されているMeshのポリゴン数を取得するメソッドを記述したクラスです。
+
 - **Materials/*.mat :**  
 私があらかじめパラメータを設定したマテリアル集です。
+
+- **Models/FormulaRingModel.fbx :**  
+33ポリゴンのリングです。 形が少し歪かもしれませんがShaderでポリゴンを変形するのであまり気にする必要ないと思います。 
+
 - **Prefabs/FomulaAccessory_Mesh.prefab :**  
 Meshrendererを使用したFomulaAccessoryです。アクセサリーとして使用するのであれば基本的にこちらを使用すればいいと思います。 
 - **Prefabs/FomulaAccessory_Mesh.prefab :**  
 SkinnedMeshRendererを使用したFomulaAccessoryです。 大きめのオブジェクトとして使用するのであればこちらを使用すると良いと思います。
+
+- **Shaders/FormulaAccessory.shader :**  
+こちらを適当なMaterialにアタッチして使用します。パラメータを変更することで自由に形、色などを変更することが可能です。  
+
+- **SampleScene :**  
+上記に挙げたいくつかの形状モデルをシーンに配置してあります。参考にどうぞ
 
 # ヘルパー機能
 
@@ -227,19 +232,11 @@ SkinnedMeshRendererを使用したFomulaAccessoryです。 大きめのオブジ
   作成したShaderには普段は設定する必要のないパラメータがあったため、それらを普段は気にすることのないようにしたいと思っていました。そこでShaderGUIを使用したエディタ拡張を実装することにしました。  
   これによって基本的なパラメータ以外は設定する意思や機会があるときだけ設定可能とすることができました。  
  
-- ## Reset Meshについて  
+- ## ShaderPropertyHelperについて  
 - **使い方 :**  
 Mesh FilterまたはSkinned Mesh Rendererに登録されているMeshのポリゴン数を読み取り、Shaderに伝える機能を提供します。
-Meshを変更したら **Mesh Updateボタン** をクリックしてください。そうすることでポリゴン数にあった描画がされます。
-
-- **説明 :**   
-以下の説明は使用に関しては特に関与しないので読まなくても大丈夫です。  
-作成したShaderはメッシュのポリゴン数に依存するためメッシュのポリゴン数をShaderに伝える必要がありました。
-
-  ポリゴン数を直接入力する形だとポリゴン数を予め調べて入力する必要があり面倒くさいと感じたため、ScriptからGameObjectにアタッチされているメッシュのポリゴン数を調べてShaderに伝える機能を作成しました。   
-
-  エディタ拡張でメッシュが変更されたら自動で更新する方法も調べてみたのですが、Project内の全Mesh Rendererに対して処理が行われてしまい、無駄が多くなると感じたため手動でボタンを押したときだけ更新するようにしました。
-
+Mesh FilterまたはSkinned Mesh RendererのMeshを変更すると動的に変更がShaderに伝えられます。
+の機能によってMeshを変更しても形状を崩さず描画することが可能になりました。
 
 # 利用規約
 
