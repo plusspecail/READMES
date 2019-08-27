@@ -48,85 +48,6 @@ Formula Accessory
 <img src="./Pictures/HelixRing.png" width=300x300>
 </details>
 
-# 新しく数式を登録する方法
-<font color="red">**㊟最初に話しておくと新しく数式を登録するのにShader内のコードをいじらなくてはいけないためかなり面倒くさい作業になります。もっと簡単な方法もあると思うのですが実装はできなかったです。 すみません...**</font>
-
-FomulaAccessoryで使用されている数式は基本的に極座標系での数式を使用しています。  
-そのため、x軸を偏角Θ、y軸を原点からの距離rと見立てます。
-以下に、花模様の数式とその数式から生成されるグラフを掲載します。また上記に記した通りxをΘ、yをrと見立ててください。  
-
-![image](./Pictures/Graph.png)  
-
-
-1. 新しく数式を登録する場合は、まず極座標系での数式を探してください。
-1. 次に1で見つけた数式の**x**を**theta**という文字列に置き換えてください。
-1. 2で作成した数式をShaderのコード内に埋め込みます。<u><font color="red">例としてここではSAMPLEという名前で登録することにします。</font></u>  
-FomulaAccessory.shader内の97行目あたりに記載されている以下のコードの近くに新しく数式を定義するコードを記載します。
-
-```diff
-// 模様を形成する数式のマクロ
-#define FORMULA_FLOWER (abs(cos( (theta + 1.0) * _HalfPetalNum) ) + 0.2 + _ParticleCenterFactor)
-+#define FORMULA_SAMPLE (xをthetaで置き換え済みの登録したい数式)
-``` 
-4. Shaderのマルチコンパイルを定義します。FomulaAccessory.shader内の85行目辺りと92行目辺りに記載されている以下のコードの近くに新しくマルチコンパイル用の定義をします。  
-
-**外側の模様** 
-```diff
-#pragma shader_feature _OUTSIDEFORM_FLOWER
-+#pragma shader_feature _OUTSIDEFORM_SAMPLE
-```
-
-**内側の模様** 
-```diff
-#pragma shader_feature _INSIDEFORM_FLOWER
-+#pragma shader_feature _INSIDEFORM_SAMPLE
-```
-
-5. Shaderのプロパティを定義します。FomulaAccessory.shader内の9行目辺りと17行目辺りに記載されている以下のコードに追加した数式の名前を追記します。
-
-**外側の模様** 
-```diff 
--[KeywordEnum(CHERRY_BLOSSOMS, FLOWER, AMEBA, CIRCLE, RIBBON)]
-+[KeywordEnum(CHERRY_BLOSSOMS, FLOWER, AMEBA, CIRCLE, RIBBON, SAMPLE)]
-_OUTSIDEFORM ("Outside Form", Float) = 0
-```
-**内側の模様** 
-```diff 
--[KeywordEnum(CHERRY_BLOSSOMS, FLOWER, AMEBA, CIRCLE, RIBBON, NONE)]
-+[KeywordEnum(CHERRY_BLOSSOMS, FLOWER, AMEBA, CIRCLE, RIBBON, NONE, SAMPLE)]
-_INSIDEFORM ("Inside Form", Float) = 0
-```
-
-6. これで最後です。 上記で設定したプロパティとマルチコンパイルから実際にコンパイルさせるコードを登録します。  FomulaAccessory.shader内の308行目辺りと372行目辺りに記載されている以下のコードに追加した数式の名前とマクロを記載します。
-
-**外側の模様** 
-```diff
-// 原点からの距離
-						
-#ifdef _OUTSIDEFORM_CHERRY_BLOSSOMS
-half r = FORMULA_CHERRY_BLOSSOMS;
-
-#elif _OUTSIDEFORM_FLOWER
-half r = FORMULA_FLOWER;
-
-+#elif _OUTSIDEFORM_SAMPLE
-+half r = FORMULA_SAMPLE;
-```
-**内側の模様**
-
-```diff
-// 原点からの距離
-#ifdef _INSIDEFORM_CHERRY_BLOSSOMS
-half r = FORMULA_CHERRY_BLOSSOMS;
-
-#elif _INSIDEFORM_FLOWER
-half r = FORMULA_FLOWER;
-
-+#elif _INSIDEFORM_SAMPLE
-+half r = FORMULA_SAMPLE;
-```
-7. お疲れさまでした。以上の記述をすることで新たに数式が定義されます。 UnityのInspector上から対象の数式の名前を選択することで定義した数式の模様を作ることができます。 上記の例だと**SAMPLE**を選択すればよいことになりますね。
-
 # 各パラメータの説明
 
 ## Outside : 外側の模様に対するプロパティ  
@@ -236,6 +157,85 @@ SkinnedMeshRendererを使用したFomulaAccessoryです。 大きめのオブジ
 	Mesh FilterまたはSkinned Mesh Rendererに登録されているMeshのポリゴン数を読み取り、Shaderに伝える機能を提供します。
 	Mesh FilterまたはSkinned Mesh RendererのMeshを変更すると動的に変更がShaderに伝えられます。
 	の機能によってMeshを変更しても形状を崩さず描画することが可能になりました。
+
+# 新しく数式を登録する方法
+<font color="red">**㊟最初に話しておくと新しく数式を登録するのにShader内のコードをいじらなくてはいけないためかなり面倒くさい作業になります。もっと簡単な方法もあると思うのですが実装はできなかったです。 すみません...**</font>
+
+FomulaAccessoryで使用されている数式は基本的に極座標系での数式を使用しています。  
+そのため、x軸を偏角Θ、y軸を原点からの距離rと見立てます。
+以下に、花模様の数式とその数式から生成されるグラフを掲載します。また上記に記した通りxをΘ、yをrと見立ててください。  
+
+![image](./Pictures/Graph.png)  
+
+
+1. 新しく数式を登録する場合は、まず極座標系での数式を探してください。
+1. 次に1で見つけた数式の**x**を**theta**という文字列に置き換えてください。
+1. 2で作成した数式をShaderのコード内に埋め込みます。<u><font color="red">例としてここではSAMPLEという名前で登録することにします。</font></u>  
+FomulaAccessory.shader内の97行目あたりに記載されている以下のコードの近くに新しく数式を定義するコードを記載します。
+
+```diff
+// 模様を形成する数式のマクロ
+#define FORMULA_FLOWER (abs(cos( (theta + 1.0) * _HalfPetalNum) ) + 0.2 + _ParticleCenterFactor)
++#define FORMULA_SAMPLE (xをthetaで置き換え済みの登録したい数式)
+``` 
+4. Shaderのマルチコンパイルを定義します。FomulaAccessory.shader内の85行目辺りと92行目辺りに記載されている以下のコードの近くに新しくマルチコンパイル用の定義をします。  
+
+**外側の模様** 
+```diff
+#pragma shader_feature _OUTSIDEFORM_FLOWER
++#pragma shader_feature _OUTSIDEFORM_SAMPLE
+```
+
+**内側の模様** 
+```diff
+#pragma shader_feature _INSIDEFORM_FLOWER
++#pragma shader_feature _INSIDEFORM_SAMPLE
+```
+
+5. Shaderのプロパティを定義します。FomulaAccessory.shader内の9行目辺りと17行目辺りに記載されている以下のコードに追加した数式の名前を追記します。
+
+**外側の模様** 
+```diff 
+-[KeywordEnum(CHERRY_BLOSSOMS, FLOWER, AMEBA, CIRCLE, RIBBON)]
++[KeywordEnum(CHERRY_BLOSSOMS, FLOWER, AMEBA, CIRCLE, RIBBON, SAMPLE)]
+_OUTSIDEFORM ("Outside Form", Float) = 0
+```
+**内側の模様** 
+```diff 
+-[KeywordEnum(CHERRY_BLOSSOMS, FLOWER, AMEBA, CIRCLE, RIBBON, NONE)]
++[KeywordEnum(CHERRY_BLOSSOMS, FLOWER, AMEBA, CIRCLE, RIBBON, NONE, SAMPLE)]
+_INSIDEFORM ("Inside Form", Float) = 0
+```
+
+6. これで最後です。 上記で設定したプロパティとマルチコンパイルから実際にコンパイルさせるコードを登録します。  FomulaAccessory.shader内の308行目辺りと372行目辺りに記載されている以下のコードに追加した数式の名前とマクロを記載します。
+
+**外側の模様** 
+```diff
+// 原点からの距離
+						
+#ifdef _OUTSIDEFORM_CHERRY_BLOSSOMS
+half r = FORMULA_CHERRY_BLOSSOMS;
+
+#elif _OUTSIDEFORM_FLOWER
+half r = FORMULA_FLOWER;
+
++#elif _OUTSIDEFORM_SAMPLE
++half r = FORMULA_SAMPLE;
+```
+**内側の模様**
+
+```diff
+// 原点からの距離
+#ifdef _INSIDEFORM_CHERRY_BLOSSOMS
+half r = FORMULA_CHERRY_BLOSSOMS;
+
+#elif _INSIDEFORM_FLOWER
+half r = FORMULA_FLOWER;
+
++#elif _INSIDEFORM_SAMPLE
++half r = FORMULA_SAMPLE;
+```
+7. お疲れさまでした。以上の記述をすることで新たに数式が定義されます。 UnityのInspector上から対象の数式の名前を選択することで定義した数式の模様を作ることができます。 上記の例だと**SAMPLE**を選択すればよいことになりますね。
 
 # 注意事項
 自分が作成中に詰まったところなどを記載します。
