@@ -207,7 +207,7 @@ half r = FORMULA_FLOWER;
 Shaderのプロパティの見た目を変更するエディタ拡張です。
 
 - **Editor/ShaderPropertyHelper.cs :**  
-MeshFilterまたはSkinnedMeshRendererに登録されているMeshのポリゴン数を取得するメソッドを記述したクラスです。
+MeshFilterまたはSkinnedMeshRendererに登録されているMeshのポリゴン数を取得するメソッドを記述したクラスです。<font color="red">Inspector上でShaderのプロパティを開いていないと更新されません。</font>
 
 - **Materials/*.mat :**  
 私があらかじめパラメータを設定したマテリアル集です。
@@ -233,10 +233,24 @@ SkinnedMeshRendererを使用したFomulaAccessoryです。 大きめのオブジ
   これによって基本的なパラメータ以外は設定する意思や機会があるときだけ設定可能とすることができました。  
  
 - ## ShaderPropertyHelperについて  
-- **使い方 :**  
-Mesh FilterまたはSkinned Mesh Rendererに登録されているMeshのポリゴン数を読み取り、Shaderに伝える機能を提供します。
-Mesh FilterまたはSkinned Mesh RendererのMeshを変更すると動的に変更がShaderに伝えられます。
-の機能によってMeshを変更しても形状を崩さず描画することが可能になりました。
+	Mesh FilterまたはSkinned Mesh Rendererに登録されているMeshのポリゴン数を読み取り、Shaderに伝える機能を提供します。
+	Mesh FilterまたはSkinned Mesh RendererのMeshを変更すると動的に変更がShaderに伝えられます。
+	の機能によってMeshを変更しても形状を崩さず描画することが可能になりました。
+
+# 注意事項
+自分が作成中に詰まったところなどを記載します。
+
+- <font color="red"> **ShaderProperyHelper :** </font>  
+	Meshを変更するしても反映されないことがあります。 その原因は恐らくMaterialのPropertyを開いていないからです。以下のようにProperty一覧を開いた状態でMeshを変更してください。  
+
+	- 間違った状態  
+<img src="./Pictures/ShaderPropertyHelper_incorrect.png" width=300x300>  
+	- 正しい状態  
+<img src="./Pictures/ShaderPropertyHelper_correct.png" width=300x300>  
+
+- <font color="red"> **PetalNum :** </font>  
+	もし, 形状をちゃんと指定しているのに円状にしかならなかったらMaterialプロパティのうちのPetal numが0になっている可能性があります。5とかにすると指定した形状になると思います。
+	
 
 # 利用規約
 
