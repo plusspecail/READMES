@@ -5,7 +5,7 @@ Formula Accessory
 # 動作環境
 - Unity : 2017.4.28f1  
 - OculusQuestでの動作確認はしていません。ご了承ください。
-# Description
+# 説明
 - 外側と内側で異なる模様を設定できます。内側の模様を非表示にすることもできます。
 ## 基本形
 こちら側でいくつかの数式を使って形状を作れるようにしました。  
@@ -136,10 +136,10 @@ MeshFilterまたはSkinnedMeshRendererに登録されているMeshのポリゴ�
 - **Models/FormulaRingModel.fbx :**  
 33ポリゴンのリングです。 形が少し歪かもしれませんがShaderでポリゴンを変形するのであまり気にする必要ないと思います。 
 
-- **Prefabs/FomulaAccessory_Mesh.prefab :**  
-Meshrendererを使用したFomulaAccessoryです。アクセサリーとして使用するのであれば基本的にこちらを使用すればいいと思います。 
-- **Prefabs/FomulaAccessory_Mesh.prefab :**  
-SkinnedMeshRendererを使用したFomulaAccessoryです。 大きめのオブジェクトとして使用するのであればこちらを使用すると良いと思います。
+- **Prefabs/FormulaAccessory_Mesh.prefab :**  
+Meshrendererを使用したFormulaAccessoryです。アクセサリーとして使用するのであれば基本的にこちらを使用すればいいと思います。 
+- **Prefabs/FormulaAccessory_Mesh.prefab :**  
+SkinnedMeshRendererを使用したFormulaAccessoryです。 大きめのオブジェクトとして使用するのであればこちらを使用すると良いと思います。
 
 - **Shaders/FormulaAccessory.shader :**  
 こちらを適当なMaterialにアタッチして使用します。パラメータを変更することで自由に形、色などを変更することが可能です。  
@@ -159,9 +159,12 @@ SkinnedMeshRendererを使用したFomulaAccessoryです。 大きめのオブジ
 	の機能によってMeshを変更しても形状を崩さず描画することが可能になりました。
 
 # 新しく数式を登録する方法
-<font color="red">**㊟最初に話しておくと新しく数式を登録するのにShader内のコードをいじらなくてはいけないためかなり面倒くさい作業になります。もっと簡単な方法もあると思うのですが実装はできなかったです。 すみません...**</font>
+<font color="red">**㊟最初に話しておくと新しく数式を登録するのにShader内のコードをいじらなくてはいけないためかなり面倒くさい作業になります。もっと簡単な方法もあると思うのですが実装はできなかったです。 すみません...**</font>  
 
-FomulaAccessoryで使用されている数式は基本的に極座標系での数式を使用しています。  
+長いので以下の表示ボタンを押して表示させてください。
+<details><summary>表示</summary>  
+
+FormulaAccessoryで使用されている数式は基本的に極座標系での数式を使用しています。  
 そのため、x軸を偏角Θ、y軸を原点からの距離rと見立てます。
 以下に、花模様の数式とその数式から生成されるグラフを掲載します。また上記に記した通りxをΘ、yをrと見立ててください。  
 
@@ -171,14 +174,14 @@ FomulaAccessoryで使用されている数式は基本的に極座標系での�
 1. 新しく数式を登録する場合は、まず極座標系での数式を探してください。
 1. 次に1で見つけた数式の**x**を**theta**という文字列に置き換えてください。
 1. 2で作成した数式をShaderのコード内に埋め込みます。<u><font color="red">例としてここではSAMPLEという名前で登録することにします。</font></u>  
-FomulaAccessory.shader内の97行目あたりに記載されている以下のコードの近くに新しく数式を定義するコードを記載します。
+FormulaAccessory.shader内の97行目あたりに記載されている以下のコードの近くに新しく数式を定義するコードを記載します。
 
 ```diff
 // 模様を形成する数式のマクロ
 #define FORMULA_FLOWER (abs(cos( (theta + 1.0) * _HalfPetalNum) ) + 0.2 + _ParticleCenterFactor)
 +#define FORMULA_SAMPLE (xをthetaで置き換え済みの登録したい数式)
 ``` 
-4. Shaderのマルチコンパイルを定義します。FomulaAccessory.shader内の85行目辺りと92行目辺りに記載されている以下のコードの近くに新しくマルチコンパイル用の定義をします。  
+4. Shaderのマルチコンパイルを定義します。FormulaAccessory.shader内の85行目辺りと92行目辺りに記載されている以下のコードの近くに新しくマルチコンパイル用の定義をします。  
 
 **外側の模様** 
 ```diff
@@ -192,7 +195,7 @@ FomulaAccessory.shader内の97行目あたりに記載されている以下の�
 +#pragma shader_feature _INSIDEFORM_SAMPLE
 ```
 
-5. Shaderのプロパティを定義します。FomulaAccessory.shader内の9行目辺りと17行目辺りに記載されている以下のコードに追加した数式の名前を追記します。
+5. Shaderのプロパティを定義します。FormulaAccessory.shader内の9行目辺りと17行目辺りに記載されている以下のコードに追加した数式の名前を追記します。
 
 **外側の模様** 
 ```diff 
@@ -207,7 +210,7 @@ _OUTSIDEFORM ("Outside Form", Float) = 0
 _INSIDEFORM ("Inside Form", Float) = 0
 ```
 
-6. これで最後です。 上記で設定したプロパティとマルチコンパイルから実際にコンパイルさせるコードを登録します。  FomulaAccessory.shader内の308行目辺りと372行目辺りに記載されている以下のコードに追加した数式の名前とマクロを記載します。
+6. これで最後です。 上記で設定したプロパティとマルチコンパイルから実際にコンパイルさせるコードを登録します。  FormulaAccessory.shader内の308行目辺りと372行目辺りに記載されている以下のコードに追加した数式の名前とマクロを記載します。
 
 **外側の模様** 
 ```diff
@@ -236,6 +239,7 @@ half r = FORMULA_FLOWER;
 +half r = FORMULA_SAMPLE;
 ```
 7. お疲れさまでした。以上の記述をすることで新たに数式が定義されます。 UnityのInspector上から対象の数式の名前を選択することで定義した数式の模様を作ることができます。 上記の例だと**SAMPLE**を選択すればよいことになりますね。
+</details>
 
 # 注意事項
 自分が作成中に詰まったところなどを記載します。
