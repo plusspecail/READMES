@@ -144,7 +144,7 @@ SkinnedMeshRendererを使用したFormulaAccessoryです。 大きめのオブ�
 - **Shaders/FormulaAccessory.shader :**  
 こちらを適当なMaterialにアタッチして使用します。パラメータを変更することで自由に形、色などを変更することが可能です。  
 
-- **SampleScene :**  
+- **SampleScene.unity :**  
 上記に挙げたいくつかの形状モデルをシーンに配置してあります。参考にどうぞ
 
 # ヘルパー機能
@@ -156,7 +156,7 @@ SkinnedMeshRendererを使用したFormulaAccessoryです。 大きめのオブ�
 - ## ShaderPropertyHelperについて  
 	Mesh FilterまたはSkinned Mesh Rendererに登録されているMeshのポリゴン数を読み取り、Shaderに伝える機能を提供します。
 	Mesh FilterまたはSkinned Mesh RendererのMeshを変更すると動的に変更がShaderに伝えられます。
-	の機能によってMeshを変更しても形状を崩さず描画することが可能になりました。
+	この機能によってMeshを変更しても形状を崩さず描画することが可能になりました。
 
 # 新しく数式を登録する方法
 <font color="red">**㊟最初に話しておくと新しく数式を登録するのにShader内のコードをいじらなくてはいけないためかなり面倒くさい作業になります。もっと簡単な方法もあると思うのですが実装はできなかったです。 すみません...**</font>  
